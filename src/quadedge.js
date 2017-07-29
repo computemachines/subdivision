@@ -1,7 +1,7 @@
 /** QuadEdge data structure */
 
 
-class Vector {
+class Vertex {
   constructor(x, y) {
     this.x = x
     this.y = y
@@ -20,9 +20,44 @@ function makeEdge() {
   return up
 }
 
-  
+/**
+ * Topological operator taken from Guibas and Stolfi.
+ *
+ */
+export function splice(a, b) {
+  const alpha = a.onext().rot(),
+	beta = b.onext().rot()
+
+  {
+    let t = a._onext
+    a._onext = b._onext
+    b._onext = t
+  }
+
+  {
+    let t = alpha._onext
+    alpha._onext = beta._onext
+    beta._onext = t
+  }
+}
 
 export const Util = {
+  num_verts: 0,
+  
+  make_debug() {
+    let edge = makeEdge()
+    edge._org = Util.num_verts ++
+    edge.sym()._org = Util.num_verts ++
+    return edge
+  },
+  
+  fold_iterator(edge, operation, done) {
+    do {
+      console.log(`${edge.org()} -> ${edge.dest()}`)
+      edge = operation(edge)
+    } while (!done(edge))
+  },
+  
   buildEdgeFromNewPolygon(verticies) {
     let edge = makeEdge()
     edge._org = verticies[0]
@@ -30,10 +65,11 @@ export const Util = {
   }
 }
 
+const Infinity = "Infinity" //new Vertex()
 
 /** Class representing a Directed Edge */
 class DEdge {
-  constructor(rot, onext=this, org) {
+  constructor(rot, onext=this, org=Infinity) {
     this._rot = rot
     this._onext = onext
     this._org = org
@@ -74,7 +110,7 @@ class DEdge {
    * Get Destination Vertex
    * @return {Vertex} Destination Vertex */
   dest() {
-    return this.lnext().org()
+    return this.sym().org()//lnext().org()
   }
 
   onext() {
