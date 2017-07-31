@@ -17,7 +17,7 @@
     "url": "https://github.com/computemachines/subdivision.git"
   },
   "scripts": {
-    "build": "babel src -d build",
+    "build": "babel src test -d build -s",
     "test": "mocha --compilers js:babel-core/register"
   },
   "babel": {

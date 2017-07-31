@@ -1,10 +1,9 @@
-/** QuadEdge data structure */
-
+/** Quadedge data structure */
 
 class Vertex {
   constructor(x, y) {
-    this.x = x
-    this.y = y
+    this.x = x;
+    this.y = y;
   }
 }
 
@@ -12,12 +11,20 @@ function makeEdge() {
   let up = new DEdge(),
       left = new DEdge(),
       down = new DEdge(),
-      right = new DEdge()
-  up._rot = left
-  left._rot = down
-  down._rot = right
-  right._rot = up
-  return up
+      right = new DEdge();
+  up._rot = left;
+  up._onext = up;
+  up._org = 'a';
+  left._rot = down;
+  left._onext = right;
+  left._org = Infinity;
+  down._rot = right;
+  down._onext = down;
+  down._org = 'b';
+  right._rot = up;
+  right._onext = left;
+  right._org = Infinity;
+  return up;
 }
 
 /**
@@ -26,18 +33,18 @@ function makeEdge() {
  */
 export function splice(a, b) {
   const alpha = a.onext().rot(),
-	beta = b.onext().rot()
+	beta = b.onext().rot();
 
   {
-    let t = a._onext
-    a._onext = b._onext
-    b._onext = t
+    let t = a._onext;
+    a._onext = b._onext;
+    b._onext = t;
   }
 
   {
-    let t = alpha._onext
-    alpha._onext = beta._onext
-    beta._onext = t
+    let t = alpha._onext;
+    alpha._onext = beta._onext;
+    beta._onext = t;
   }
 }
 
@@ -45,34 +52,34 @@ export const Util = {
   num_verts: 0,
   
   make_debug() {
-    let edge = makeEdge()
-    edge._org = Util.num_verts ++
-    edge.sym()._org = Util.num_verts ++
-    return edge
+    let edge = makeEdge();
+    edge._org = Util.num_verts ++;
+    edge.sym()._org = Util.num_verts ++;
+    return edge;
   },
   
   fold_iterator(edge, operation, done) {
     do {
-      console.log(`${edge.org()} -> ${edge.dest()}`)
-      edge = operation(edge)
+      console.log(`${edge.org()} -> ${edge.dest()}`);
+      edge = operation(edge);
     } while (!done(edge))
   },
   
   buildEdgeFromNewPolygon(verticies) {
-    let edge = makeEdge()
-    edge._org = verticies[0]
-    return edge
+    let edge = makeEdge();
+    edge._org = verticies[0];
+    return edge;
   }
 }
 
-const Infinity = "Infinity" //new Vertex()
+const Infinity = "Infinity"; //new Vertex()
 
 /** Class representing a Directed Edge */
 class DEdge {
   constructor(rot, onext=this, org=Infinity) {
-    this._rot = rot
-    this._onext = onext
-    this._org = org
+    this._rot = rot;
+    this._onext = onext;
+    this._org = org;
   }
   
   /**
@@ -80,7 +87,7 @@ class DEdge {
    * @return {DEdge}
    */
   rot() {
-    return this._rot
+    return this._rot;
   }
 
   /**
@@ -88,7 +95,7 @@ class DEdge {
    * @return {DEdge}
    */
   rot_inv() {
-    return this.rot().rot().rot()
+    return this.rot().rot().rot();
   }
 
   /**
@@ -96,30 +103,33 @@ class DEdge {
    * @return {DEdge}
    */
   sym() {
-    return this.rot().rot()
+    return this.rot().rot();
   }
     
   /**
    * Get Origin Vertex
    * @return {Vertex} Origin Vertex */
   org() {
-    return this._org
+    return this._org;
   }
 
   /**
    * Get Destination Vertex
    * @return {Vertex} Destination Vertex */
   dest() {
-    return this.sym().org()//lnext().org()
+    return this.sym().org();//lnext().org()
   }
 
   onext() {
-    return this._onext
+    return this._onext;
   }
   lnext() {
-    return this.rot_inv().onext().rot()
+    return this.rot_inv().onext().rot();
   }
 }
+
+// const a = Util.makeDebug();
+// const b = Util.makeDebug();
 
 
 export {DEdge, makeEdge}
