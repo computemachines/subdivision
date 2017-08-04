@@ -7,20 +7,20 @@ class Vertex {
   }
 }
 
-function makeEdge() {
+function makeEdge(from='a', to='b') {
   let up = new DEdge(),
       left = new DEdge(),
       down = new DEdge(),
       right = new DEdge();
   up._rot = left;
   up._onext = up;
-  up._org = 'a';
+  up._org = from;
   left._rot = down;
   left._onext = right;
   left._org = Infinity;
   down._rot = right;
   down._onext = down;
-  down._org = 'b';
+  down._org = to;
   right._rot = up;
   right._onext = left;
   right._org = Infinity;
