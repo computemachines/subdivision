@@ -35,17 +35,25 @@ export function splice(a, b) {
   const alpha = a.onext().rot(),
 	beta = b.onext().rot();
 
-  {
+  { // swap a.onext, b.onext
     let t = a._onext;
     a._onext = b._onext;
     b._onext = t;
   }
 
-  {
+  { // swap alpha.onext, beta.onext
     let t = alpha._onext;
     alpha._onext = beta._onext;
     beta._onext = t;
   }
+}
+
+
+export function connect(a, b) {
+  let e = makeEdge(a.dest(), b.org());
+  splice(e, a.lnext());
+  splice(e.sym(), b);
+  return e;
 }
 
 export const Util = {
@@ -81,6 +89,9 @@ class DEdge {
     this._onext = onext;
     this._org = org;
   }
+  toString(separator='->') {
+    return `(${this.org()}) ${separator} (${this.dest()})`;
+  };
   
   /**
    * Get Dual Edge directed 90 degrees counter clockwise to this.
