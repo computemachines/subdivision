@@ -149,6 +149,9 @@ class DEdge {
   onext() {
     return this._onext;
   }
+  oprev() {
+    return this.rot().onext().rot();
+  }
   lnext() {
     return this.rot_inv().onext().rot();
   }

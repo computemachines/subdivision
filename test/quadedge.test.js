@@ -51,5 +51,8 @@ describe('DEdge', function() {
       // assert.equal(degree(square), 4);
     });
   });
+  describe('#oprev', function() {
+    it('should be inverse of #onext()');
+  });
 });
 
