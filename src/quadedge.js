@@ -56,6 +56,21 @@ export function connect(a, b) {
   return e;
 }
 
+// TODO: Check that this actually deletes all references.
+export function deleteEdge(e) {
+  splice(e, e.oprev());
+  splice(e.sym(), e.sym().oprev());
+}
+
+export function swap(e) {
+  let a = e.oprev();
+  let b = e.sym().oprev();
+  splice(e, a); splice(e.sym(), b);
+  splice(e, a.lnext()); splice(e.sym(), b.lnext());
+  e._org = a.dest();
+  e.sym()._org = b.dest();
+}
+
 export const Util = {
   num_verts: 0,
   
