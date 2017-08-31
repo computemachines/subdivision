@@ -1,6 +1,6 @@
 import {assert} from 'chai';
 
-import {DEdge, makeEdge, Util} from '../build/quadedge';
+import {DEdge, makeEdge, Util} from './quadedge';
 
 describe('DEdge', function() {
   let edge = makeEdge();

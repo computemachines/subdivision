@@ -1,5 +1,0 @@
-
-
-function Triangle() {}
-
-export {Triangle}
